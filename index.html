@@ -25,12 +25,7 @@ body.light{
   --accent:#2563eb;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
 
 body{
   height:100vh;
@@ -40,9 +35,25 @@ body{
     linear-gradient(180deg,var(--bg),var(--bg2));
   color:var(--text);
   overflow:hidden;
-  transition:.35s;
 }
 
+/* ===== BLUR OVERLAY ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.25);
+  backdrop-filter:blur(10px);
+  opacity:0;
+  pointer-events:none;
+  transition:.35s;
+  z-index:998;
+}
+.overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* ===== SCREENS ===== */
 .screen{
   position:absolute;
   inset:0;
@@ -56,13 +67,7 @@ body{
   pointer-events:auto;
 }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:26px;
-  margin-bottom:10px
-}
+.top{display:flex;align-items:center;font-size:26px}
 .menu-btn{cursor:pointer}
 
 .logo{
@@ -91,78 +96,9 @@ body{
   font-size:18px;
   font-weight:600;
   cursor:pointer;
-  transition:.25s;
-}
-.btn:hover{
-  transform:translateY(-2px) scale(1.02);
 }
 
-.back{
-  background:linear-gradient(90deg,var(--accent),#22d3ee);
-  color:#020617;
-  border:none;
-  padding:10px 18px;
-  border-radius:14px;
-  font-weight:700;
-  margin-bottom:18px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:24px;
-  margin-top:12px;
-}
-
-input,select{
-  width:100%;
-  padding:15px;
-  margin-top:12px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-}
-
-.timer{
-  font-size:64px;
-  text-align:center;
-  margin:30px 0;
-  font-weight:800
-}
-.timer-actions{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px
-}
-
-.item{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:14px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.04);
-  margin-top:12px;
-}
-.item.done{
-  opacity:.5;
-  text-decoration:line-through
-}
-.item button{
-  margin-left:auto;
-  background:#ef4444;
-  border:none;
-  color:#fff;
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  cursor:pointer
-}
-
-/* Drawer */
+/* ===== DRAWER ===== */
 .drawer{
   position:fixed;
   top:0;
@@ -172,30 +108,82 @@ input,select{
   background:linear-gradient(180deg,var(--bg2),var(--bg));
   border-right:1px solid var(--border);
   padding:22px;
-  transition:.35s;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+  transform:translateX(0);
   z-index:999;
 }
-.drawer.open{left:0}
-.drawer h3{margin-bottom:20px}
-.drawer button{
+.drawer.open{
+  transform:translateX(75%);
+}
+
+/* SNAP EFFECT */
+.drawer.snap{
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close-btn{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  font-size:18px;
+  cursor:pointer;
+}
+
+.drawer button.action{
   width:100%;
   padding:14px;
   border-radius:14px;
   border:none;
   background:linear-gradient(90deg,var(--accent),#22d3ee);
   color:#020617;
-  font-weight:700
+  font-weight:700;
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:24px;
+  margin-top:12px;
+}
+.back{
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  border:none;
+  padding:10px 18px;
+  border-radius:14px;
+  font-weight:700;
+  margin-bottom:18px;
 }
 </style>
 </head>
 
 <body>
 
+<div class="overlay" id="overlay"></div>
+
 <!-- DRAWER -->
 <div class="drawer" id="drawer">
-  <h3>Configurações</h3>
-  <button onclick="toggleTheme()">Modo Claro / Escuro</button>
-  <p style="margin-top:20px;color:var(--muted)">Arraste ou dê 2 toques para fechar</p>
+  <div class="drawer-header">
+    <h3>Configurações</h3>
+    <button class="close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <button class="action" onclick="toggleTheme()">Modo Claro / Escuro</button>
+
+  <p style="margin-top:20px;color:var(--muted)">
+    Arraste, dê 2 toques ou clique fora para fechar
+  </p>
 </div>
 
 <!-- HOME -->
@@ -207,144 +195,52 @@ input,select{
   <div class="logo">APOLLO</div>
 
   <div class="home-actions">
-    <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
-    <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
-    <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
-    <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
-  </div>
-</div>
-
-<!-- IMC -->
-<div class="screen" id="imc">
-  <button class="back" onclick="showScreen('home')">Voltar</button>
-  <h2>Calculadora Fitness</h2>
-  <div class="card">
-    <input id="peso" type="number" placeholder="Peso (kg)">
-    <input id="altura" type="number" placeholder="Altura (cm)">
-    <button class="btn" onclick="calcIMC()">Calcular</button>
-    <h2 id="imcResult" style="text-align:center;margin-top:16px">0.0</h2>
-  </div>
-</div>
-
-<!-- TIMER -->
-<div class="screen" id="timer">
-  <button class="back" onclick="showScreen('home')">Voltar</button>
-  <h2>Timer de Treino</h2>
-  <div class="card">
-    <div class="timer" id="timerDisplay">00:00</div>
-    <div class="timer-actions">
-      <button class="btn" onclick="startTimer()">Iniciar</button>
-      <button class="btn" onclick="pauseTimer()">Pausar</button>
-      <button class="btn" onclick="resetTimer()">Resetar</button>
-    </div>
-  </div>
-</div>
-
-<!-- LISTA -->
-<div class="screen" id="lista">
-  <button class="back" onclick="showScreen('home')">Voltar</button>
-  <h2>Lista de Compras</h2>
-  <div class="card">
-    <input id="itemName" placeholder="Item">
-    <input id="itemQty" placeholder="Qtd">
-    <select id="itemCat">
-      <option>Mercado</option>
-      <option>Higiene</option>
-      <option>Limpeza</option>
-      <option>Proteínas</option>
-    </select>
-    <button class="btn" onclick="addItem()">Adicionar</button>
-    <div id="itemList"></div>
-  </div>
-</div>
-
-<!-- NOTES -->
-<div class="screen" id="notes">
-  <button class="back" onclick="showScreen('home')">Voltar</button>
-  <h2>Anotações</h2>
-  <div class="card">
-    <input id="noteInput" placeholder="Digite algo">
-    <button class="btn" onclick="addNote()">Adicionar</button>
-    <div id="noteList"></div>
+    <button class="btn">Calculadora Fitness</button>
+    <button class="btn">Timer de Treino</button>
+    <button class="btn">Lista de Compras</button>
+    <button class="btn">Anotações</button>
   </div>
 </div>
 
 <script>
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-/* Drawer */
 const drawer = document.getElementById('drawer');
+const overlay = document.getElementById('overlay');
 
+/* OPEN / CLOSE */
 function openDrawer(){
-  drawer.classList.add('open');
+  drawer.classList.add('open','snap');
+  overlay.classList.add('active');
+}
+function closeDrawer(){
+  drawer.classList.remove('open');
+  overlay.classList.remove('active');
 }
 
-let sx = 0;
-drawer.addEventListener('touchstart', e => sx = e.touches[0].clientX);
-drawer.addEventListener('touchmove', e => {
-  if(sx - e.touches[0].clientX > 60) drawer.classList.remove('open');
+/* MOBILE SWIPE */
+let sx=0;
+drawer.addEventListener('touchstart',e=>sx=e.touches[0].clientX);
+drawer.addEventListener('touchmove',e=>{
+  if(sx - e.touches[0].clientX > 60) closeDrawer();
 });
 
-/* DOUBLE TAP */
-let lastTap = 0;
-drawer.addEventListener('touchend', () => {
-  const now = Date.now();
-  if(now - lastTap < 300 && now - lastTap > 0){
-    drawer.classList.remove('open');
-  }
-  lastTap = now;
+/* MOBILE DOUBLE TAP */
+let lastTap=0;
+drawer.addEventListener('touchend',()=>{
+  const now=Date.now();
+  if(now-lastTap<300 && now-lastTap>0) closeDrawer();
+  lastTap=now;
 });
 
+/* PC SUPPORT */
+drawer.addEventListener('dblclick', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown',e=>{
+  if(e.key==="Escape") closeDrawer();
+});
+
+/* THEME */
 function toggleTheme(){
   document.body.classList.toggle('light');
-}
-
-/* IMC */
-function calcIMC(){
-  let p = peso.value;
-  let a = altura.value / 100;
-  if(!p || !a) return alert("Preencha os campos");
-  imcResult.innerText = (p / (a*a)).toFixed(1);
-}
-
-/* Timer */
-let sec=0, intv;
-function startTimer(){
-  if(!intv){
-    intv = setInterval(()=>{
-      sec++;
-      timerDisplay.innerText =
-        String(Math.floor(sec/60)).padStart(2,'0')+":"+
-        String(sec%60).padStart(2,'0');
-    },1000);
-  }
-}
-function pauseTimer(){ clearInterval(intv); intv=null; }
-function resetTimer(){ pauseTimer(); sec=0; timerDisplay.innerText="00:00"; }
-
-/* Lista */
-function addItem(){
-  if(!itemName.value) return;
-  let d=document.createElement('div');
-  d.className='item';
-  d.innerHTML=`<strong>${itemName.value}</strong> (${itemCat.value})
-  <button onclick="this.parentElement.remove()">×</button>`;
-  itemList.appendChild(d);
-  itemName.value=itemQty.value='';
-}
-
-/* Notes */
-function addNote(){
-  if(!noteInput.value) return;
-  let d=document.createElement('div');
-  d.className='item';
-  d.innerHTML=`${noteInput.value}
-  <button onclick="this.parentElement.remove()">×</button>`;
-  noteList.appendChild(d);
-  noteInput.value='';
 }
 </script>
 
