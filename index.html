@@ -3,254 +3,305 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apollo Fitness</title>
+<title>Apollo App</title>
 
 <style>
-:root{
-  --bg:#0b0f14;
-  --bg2:#0f172a;
-  --card:rgba(255,255,255,0.06);
-  --text:#ffffff;
-  --muted:#9ca3af;
-  --border:rgba(255,255,255,0.12);
-  --accent:#38bdf8;
-}
-body.light{
-  --bg:#eef2f7;
-  --bg2:#dbeafe;
-  --card:#ffffff;
-  --text:#020617;
-  --muted:#475569;
-  --border:#d1d5db;
-  --accent:#2563eb;
+:root {
+  --bg: #000;
+  --card: #111;
+  --text: #fff;
+  --muted: #aaa;
+  --accent: #fff;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-body{
-  height:100vh;
-  background:
-    radial-gradient(1200px 600px at top right, rgba(56,189,248,.15), transparent 60%),
-    radial-gradient(800px 400px at bottom left, rgba(37,99,235,.18), transparent 60%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  color:var(--text);
-  overflow:hidden;
-  transition:.35s;
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
 }
 
-/* ===== OVERLAY BLUR ===== */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.25);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:998;
-}
-.overlay.active{
-  opacity:1;
-  pointer-events:auto;
+/* ---------- BOTÕES ---------- */
+button {
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: #000;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
-/* ===== SCREENS ===== */
-.screen{
-  position:absolute;
-  inset:0;
-  padding:24px;
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-}
-.screen.active{
-  opacity:1;
-  pointer-events:auto;
+button:active {
+  transform: scale(.96);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:26px;
-  margin-bottom:10px
-}
-.menu-btn{cursor:pointer}
-
-.logo{
-  text-align:center;
-  font-size:44px;
-  font-weight:900;
-  letter-spacing:4px;
-  margin:40px 0 30px;
-  background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+/* ripple discreto */
+button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.08);
+  opacity: 0;
+  transition: opacity .2s;
 }
 
-.home-actions{
-  display:grid;
-  gap:18px;
+button:active::after {
+  opacity: 1;
 }
 
-.btn{
-  width:100%;
-  padding:20px;
-  border-radius:20px;
-  border:1px solid var(--border);
-  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
-  color:var(--text);
-  font-size:18px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s;
+/* ---------- TELAS ---------- */
+.screen {
+  display: none;
+  padding: 20px;
+  max-width: 480px;
+  margin: auto;
 }
 
-.back{
-  background:linear-gradient(90deg,var(--accent),#22d3ee);
-  color:#020617;
-  border:none;
-  padding:10px 18px;
-  border-radius:14px;
-  font-weight:700;
-  margin-bottom:18px;
+.screen.active {
+  display: block;
 }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:24px;
-  margin-top:12px;
+h2 {
+  text-align: center;
+  margin-bottom: 16px;
 }
 
-input,select{
-  width:100%;
-  padding:15px;
-  margin-top:12px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
+/* ---------- CARDS ---------- */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* ===== DRAWER ===== */
-.drawer{
-  position:fixed;
-  top:0;
-  left:0;
-  width:85%;
-  max-width:320px;
-  height:100%;
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
-  border-right:1px solid var(--border);
-  padding:22px;
-  transform:translateX(-100%);
-  transition:.35s;
-  z-index:999;
-  overflow-y:auto;
-}
-.drawer.open{transform:translateX(0)}
-
-.drawer h3{margin-bottom:20px}
-.drawer button{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  background:linear-gradient(90deg,var(--accent),#22d3ee);
-  color:#020617;
-  font-weight:700
+input, select {
+  background: #000;
+  border: 1px solid #222;
+  color: var(--text);
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
 }
 
-/* ===== BOTÃO X DISCRETO ===== */
-.close-drawer{
-  position:absolute;
-  top:14px;
-  right:14px;
-  background:none;
-  border:none;
-  font-size:16px;
-  color:var(--muted);
-  opacity:.6;
-  cursor:pointer;
+/* ---------- BACK ---------- */
+.back {
+  background: none;
+  color: var(--muted);
+  text-align: left;
+  padding: 0;
+  margin-bottom: 12px;
 }
-.close-drawer:hover{opacity:1}
 
-/* Texto nunca corta */
-.drawer *{
-  white-space:normal;
-  overflow-wrap:break-word;
-  word-break:break-word;
+/* ---------- TIMER ---------- */
+.timer {
+  font-size: 42px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.timer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.timer-actions button {
+  flex: 1;
+}
+
+/* ---------- DRAWER CONFIG ---------- */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background: #0a0a0a;
+  width: 85%;
+  max-width: 360px;
+  transform: translateX(100%);
+  transition: .3s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* X DISCRETO */
+.drawer-close {
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  width: auto;
+  padding: 4px;
+  position: absolute;
+  top: 14px;
+  right: 16px;
+}
+
+/* texto nunca corta */
+.drawer p {
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+/* ---------- PC ---------- */
+@media (min-width: 900px) {
+  .drawer {
+    width: 320px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
-
-<!-- DRAWER -->
-<div class="drawer" id="drawer">
-  <button class="close-drawer" onclick="closeDrawer()">✕</button>
-  <h3>Configurações</h3>
-  <button onclick="toggleTheme()">Modo Claro / Escuro</button>
-  <p style="margin-top:20px;color:var(--muted)">Arraste, toque duas vezes ou clique fora para fechar</p>
-</div>
-
 <!-- HOME -->
 <div class="screen active" id="home">
-  <div class="top">
-    <div class="menu-btn" onclick="openDrawer()">☰</div>
+  <h2>Apollo</h2>
+  <div class="card">
+    <button onclick="showScreen('imc')">IMC</button>
+    <button onclick="showScreen('timer')">Timer</button>
+    <button onclick="showScreen('lista')">Lista</button>
+    <button onclick="showScreen('notes')">Notas</button>
+    <button onclick="openDrawer()">Configurações</button>
   </div>
-  <div class="logo">APOLLO</div>
-  <div class="home-actions">
-    <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
-    <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
-    <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
-    <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
+</div>
+
+<!-- IMC -->
+<div class="screen" id="imc">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Calculadora Fitness</h2>
+  <div class="card">
+    <input id="idade" type="number" placeholder="Idade">
+    <input id="peso" type="number" placeholder="Peso (kg)">
+    <input id="altura" type="number" placeholder="Altura (cm)">
+    <button onclick="calcIMC()">Calcular</button>
+    <h2 id="imcResult">0.0</h2>
   </div>
+</div>
+
+<!-- TIMER -->
+<div class="screen" id="timer">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Timer de Treino</h2>
+  <div class="card">
+    <div class="timer" id="timerDisplay">00:00</div>
+    <div class="timer-actions">
+      <button onclick="startTimer()">Iniciar</button>
+      <button onclick="pauseTimer()">Pausar</button>
+      <button onclick="resetTimer()">Resetar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LISTA -->
+<div class="screen" id="lista">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Lista de Compras</h2>
+  <div class="card">
+    <input id="itemName" placeholder="Item">
+    <input id="itemQty" placeholder="Quantidade">
+    <select id="itemCat">
+      <option>Mercado</option><option>Higiene</option>
+      <option>Limpeza</option><option>Açougue</option>
+      <option>Frutas</option><option>Verduras</option>
+    </select>
+    <button onclick="addItem()">Adicionar</button>
+    <div id="itemList"></div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="screen" id="notes">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Anotações</h2>
+  <div class="card">
+    <input id="noteInput" placeholder="Digite sua anotação">
+    <button onclick="addNote()">Adicionar</button>
+    <div id="noteList"></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <h2>Configurações</h2>
+  <p>
+    Aqui ficam as configurações do app.  
+    Texto nunca corta, quebra linha corretamente e mantém UX limpa.
+  </p>
 </div>
 
 <script>
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-/* DRAWER */
-const drawer=document.getElementById('drawer');
-const overlay=document.getElementById('overlay');
-
-function openDrawer(){
+function openDrawer() {
   drawer.classList.add('open');
-  overlay.classList.add('active');
+  overlay.classList.add('open');
 }
-function closeDrawer(){
+
+function closeDrawer() {
   drawer.classList.remove('open');
-  overlay.classList.remove('active');
+  overlay.classList.remove('open');
 }
 
-/* Swipe + double tap */
-let sx=0,lastTap=0;
-drawer.addEventListener('touchstart',e=>sx=e.touches[0].clientX);
-drawer.addEventListener('touchmove',e=>{
-  if(sx-e.touches[0].clientX>60) closeDrawer();
-});
-drawer.addEventListener('touchend',()=>{
-  let now=Date.now();
-  if(now-lastTap<300) closeDrawer();
-  lastTap=now;
-});
+/* IMC */
+function calcIMC() {
+  const peso = +pesoInput.value;
+  const altura = +alturaInput.value / 100;
+  imcResult.innerText = (peso / (altura * altura)).toFixed(1);
+}
 
-function toggleTheme(){
-  document.body.classList.toggle('light');
+/* TIMER */
+let sec = 0, t;
+function startTimer() {
+  if (t) return;
+  t = setInterval(() => {
+    sec++;
+    timerDisplay.innerText =
+      String(Math.floor(sec/60)).padStart(2,'0') + ":" +
+      String(sec%60).padStart(2,'0');
+  }, 1000);
+}
+function pauseTimer() {
+  clearInterval(t); t = null;
+}
+function resetTimer() {
+  pauseTimer(); sec = 0; timerDisplay.innerText = "00:00";
 }
 </script>
 
