@@ -43,7 +43,7 @@ body{
   transition:.35s;
 }
 
-/* OVERLAY BLUR */
+/* ===== OVERLAY BLUR ===== */
 .overlay{
   position:fixed;
   inset:0;
@@ -60,6 +60,7 @@ body{
   pointer-events:auto;
 }
 
+/* ===== SCREENS ===== */
 .screen{
   position:absolute;
   inset:0;
@@ -110,9 +111,6 @@ body{
   cursor:pointer;
   transition:.25s;
 }
-.btn:hover{
-  transform:translateY(-2px) scale(1.02);
-}
 
 .back{
   background:linear-gradient(90deg,var(--accent),#22d3ee);
@@ -142,13 +140,13 @@ input,select{
   color:var(--text);
 }
 
-/* DRAWER */
+/* ===== DRAWER ===== */
 .drawer{
   position:fixed;
   top:0;
   left:0;
   width:85%;
-  max-width:360px;
+  max-width:320px;
   height:100%;
   background:linear-gradient(180deg,var(--bg2),var(--bg));
   border-right:1px solid var(--border);
@@ -157,9 +155,6 @@ input,select{
   transition:.35s;
   z-index:999;
   overflow-y:auto;
-}
-@media(min-width:768px){
-  .drawer{width:320px}
 }
 .drawer.open{transform:translateX(0)}
 
@@ -174,23 +169,25 @@ input,select{
   font-weight:700
 }
 
-/* BOTÃO X */
+/* ===== BOTÃO X DISCRETO ===== */
 .close-drawer{
   position:absolute;
   top:14px;
   right:14px;
   background:none;
   border:none;
-  font-size:20px;
+  font-size:16px;
   color:var(--muted);
+  opacity:.6;
   cursor:pointer;
 }
+.close-drawer:hover{opacity:1}
 
-/* QUEBRA DE TEXTO */
+/* Texto nunca corta */
 .drawer *{
-  word-wrap:break-word;
-  overflow-wrap:break-word;
   white-space:normal;
+  overflow-wrap:break-word;
+  word-break:break-word;
 }
 </style>
 </head>
@@ -204,7 +201,7 @@ input,select{
   <button class="close-drawer" onclick="closeDrawer()">✕</button>
   <h3>Configurações</h3>
   <button onclick="toggleTheme()">Modo Claro / Escuro</button>
-  <p style="margin-top:20px;color:var(--muted)">Arraste, dê 2 toques ou clique fora para fechar</p>
+  <p style="margin-top:20px;color:var(--muted)">Arraste, toque duas vezes ou clique fora para fechar</p>
 </div>
 
 <!-- HOME -->
@@ -212,9 +209,7 @@ input,select{
   <div class="top">
     <div class="menu-btn" onclick="openDrawer()">☰</div>
   </div>
-
   <div class="logo">APOLLO</div>
-
   <div class="home-actions">
     <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
     <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
@@ -224,6 +219,12 @@ input,select{
 </div>
 
 <script>
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* DRAWER */
 const drawer=document.getElementById('drawer');
 const overlay=document.getElementById('overlay');
 
