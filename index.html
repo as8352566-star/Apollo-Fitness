@@ -3,42 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App – Drawer Configurações</title>
+<title>Apollo Fitness</title>
 
 <style>
 :root{
-  --bg:#020617;
-  --bg2:#020617;
-  --border:#1e293b;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-  --accent:#22d3ee;
+  --bg:#0b0f14;
+  --bg2:#0f172a;
+  --card:rgba(255,255,255,0.06);
+  --text:#ffffff;
+  --muted:#9ca3af;
+  --border:rgba(255,255,255,0.12);
+  --accent:#38bdf8;
+}
+body.light{
+  --bg:#eef2f7;
+  --bg2:#dbeafe;
+  --card:#ffffff;
+  --text:#020617;
+  --muted:#475569;
+  --border:#d1d5db;
+  --accent:#2563eb;
 }
 
-/* RESET */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial
 }
 
 body{
-  background:#0f172a;
+  height:100vh;
+  background:
+    radial-gradient(1200px 600px at top right, rgba(56,189,248,.15), transparent 60%),
+    radial-gradient(800px 400px at bottom left, rgba(37,99,235,.18), transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
   color:var(--text);
-  min-height:100vh;
-}
-
-/* BOTÃO ABRIR CONFIG */
-.open-btn{
-  margin:30px;
-  padding:12px 18px;
-  border:none;
-  border-radius:14px;
-  background:var(--accent);
-  color:#020617;
-  font-weight:600;
-  cursor:pointer;
+  overflow:hidden;
+  transition:.35s;
 }
 
 /* OVERLAY BLUR */
@@ -50,13 +52,94 @@ body{
   -webkit-backdrop-filter:blur(6px);
   opacity:0;
   pointer-events:none;
-  transition:.25s ease;
+  transition:.25s;
   z-index:998;
 }
-
 .overlay.active{
   opacity:1;
   pointer-events:auto;
+}
+
+.screen{
+  position:absolute;
+  inset:0;
+  padding:24px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+.screen.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:26px;
+  margin-bottom:10px
+}
+.menu-btn{cursor:pointer}
+
+.logo{
+  text-align:center;
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin:40px 0 30px;
+  background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.home-actions{
+  display:grid;
+  gap:18px;
+}
+
+.btn{
+  width:100%;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  color:var(--text);
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+}
+.btn:hover{
+  transform:translateY(-2px) scale(1.02);
+}
+
+.back{
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  border:none;
+  padding:10px 18px;
+  border-radius:14px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:24px;
+  margin-top:12px;
+}
+
+input,select{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
 }
 
 /* DRAWER */
@@ -64,27 +147,31 @@ body{
   position:fixed;
   top:0;
   left:0;
-  height:100%;
-  width:85%;              /* mobile */
+  width:85%;
   max-width:360px;
-  background:var(--bg);
+  height:100%;
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
   border-right:1px solid var(--border);
   padding:22px;
   transform:translateX(-100%);
-  transition:transform .35s ease;
+  transition:.35s;
   z-index:999;
   overflow-y:auto;
 }
-
-/* desktop */
-@media (min-width:768px){
-  .drawer{
-    width:320px;
-  }
+@media(min-width:768px){
+  .drawer{width:320px}
 }
+.drawer.open{transform:translateX(0)}
 
-.drawer.open{
-  transform:translateX(0);
+.drawer h3{margin-bottom:20px}
+.drawer button{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  font-weight:700
 }
 
 /* BOTÃO X */
@@ -92,42 +179,15 @@ body{
   position:absolute;
   top:14px;
   right:14px;
-  background:transparent;
+  background:none;
   border:none;
   font-size:20px;
   color:var(--muted);
   cursor:pointer;
 }
 
-.close-drawer:hover{
-  color:var(--text);
-}
-
-/* CONTEÚDO */
-.drawer h2{
-  margin-bottom:18px;
-  font-size:18px;
-}
-
-.drawer button.action{
-  width:100%;
-  padding:14px;
-  border-radius:16px;
-  border:none;
-  background:linear-gradient(90deg,var(--accent),#38bdf8);
-  color:#020617;
-  font-weight:700;
-  margin-bottom:16px;
-  white-space:normal;
-}
-
-/* GARANTIA DE QUEBRA DE TEXTO */
-.drawer p,
-.drawer h1,
-.drawer h2,
-.drawer h3,
-.drawer span,
-.drawer button{
+/* QUEBRA DE TEXTO */
+.drawer *{
   word-wrap:break-word;
   overflow-wrap:break-word;
   white-space:normal;
@@ -137,34 +197,59 @@ body{
 
 <body>
 
-<button class="open-btn" onclick="openDrawer()">Abrir Configurações</button>
-
-<!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
 <!-- DRAWER -->
 <div class="drawer" id="drawer">
   <button class="close-drawer" onclick="closeDrawer()">✕</button>
+  <h3>Configurações</h3>
+  <button onclick="toggleTheme()">Modo Claro / Escuro</button>
+  <p style="margin-top:20px;color:var(--muted)">Arraste, dê 2 toques ou clique fora para fechar</p>
+</div>
 
-  <h2>Configurações</h2>
+<!-- HOME -->
+<div class="screen active" id="home">
+  <div class="top">
+    <div class="menu-btn" onclick="openDrawer()">☰</div>
+  </div>
 
-  <button class="action">Modo Claro / Escuro</button>
+  <div class="logo">APOLLO</div>
 
-  <p>
-    Toque duas vezes ou clique fora para fechar.  
-    Este texto agora quebra corretamente e não corta em nenhuma resolução.
-  </p>
+  <div class="home-actions">
+    <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
+    <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
+    <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
+    <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
+  </div>
 </div>
 
 <script>
+const drawer=document.getElementById('drawer');
+const overlay=document.getElementById('overlay');
+
 function openDrawer(){
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("overlay").classList.add("active");
+  drawer.classList.add('open');
+  overlay.classList.add('active');
+}
+function closeDrawer(){
+  drawer.classList.remove('open');
+  overlay.classList.remove('active');
 }
 
-function closeDrawer(){
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("overlay").classList.remove("active");
+/* Swipe + double tap */
+let sx=0,lastTap=0;
+drawer.addEventListener('touchstart',e=>sx=e.touches[0].clientX);
+drawer.addEventListener('touchmove',e=>{
+  if(sx-e.touches[0].clientX>60) closeDrawer();
+});
+drawer.addEventListener('touchend',()=>{
+  let now=Date.now();
+  if(now-lastTap<300) closeDrawer();
+  lastTap=now;
+});
+
+function toggleTheme(){
+  document.body.classList.toggle('light');
 }
 </script>
 
