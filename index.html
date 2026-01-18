@@ -7,244 +7,352 @@
 
 <style>
 :root{
- --bg:#0b0f14; --bg2:#0f172a; --card:rgba(255,255,255,0.06);
- --text:#ffffff; --muted:#9ca3af; --border:rgba(255,255,255,0.12);
- --accent:#38bdf8;
+  --bg:#0b0f14;
+  --bg2:#0f172a;
+  --card:rgba(255,255,255,0.06);
+  --text:#ffffff;
+  --muted:#9ca3af;
+  --border:rgba(255,255,255,0.12);
+  --accent:#38bdf8;
 }
 body.light{
- --bg:#eef2f7; --bg2:#dbeafe; --card:#ffffff;
- --text:#020617; --muted:#475569; --border:#d1d5db;
- --accent:#2563eb;
+  --bg:#eef2f7;
+  --bg2:#dbeafe;
+  --card:#ffffff;
+  --text:#020617;
+  --muted:#475569;
+  --border:#d1d5db;
+  --accent:#2563eb;
 }
+
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
+
 body{
- height:100vh;
- background:
- radial-gradient(1200px 600px at top right, rgba(56,189,248,.15), transparent 60%),
- radial-gradient(800px 400px at bottom left, rgba(37,99,235,.18), transparent 60%),
- linear-gradient(180deg,var(--bg),var(--bg2));
- color:var(--text);
- overflow:hidden;
- transition:.35s;
+  height:100vh;
+  background:
+    radial-gradient(1200px 600px at top right, rgba(56,189,248,.15), transparent 60%),
+    radial-gradient(800px 400px at bottom left, rgba(37,99,235,.18), transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+  overflow:hidden;
+  transition:.35s;
 }
 
-/* Screens */
-.screen{position:absolute;inset:0;padding:24px;opacity:0;pointer-events:none;transition:.3s}
-.screen.active{opacity:1;pointer-events:auto}
+.screen{
+  position:absolute;
+  inset:0;
+  padding:24px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+.screen.active{
+  opacity:1;
+  pointer-events:auto;
+}
 
-/* Top */
-.top{display:flex;justify-content:space-between;align-items:center;font-size:26px;margin-bottom:10px}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:26px;
+  margin-bottom:10px
+}
 .menu-btn{cursor:pointer}
 
-/* Logo */
 .logo{
- text-align:center;font-size:44px;font-weight:900;letter-spacing:4px;
- margin:40px 0 30px;
- background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);
- -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-align:center;
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin:40px 0 30px;
+  background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-/* Buttons */
-.btn{
- width:100%;padding:20px;border-radius:20px;border:1px solid var(--border);
- background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
- backdrop-filter:blur(10px);
- color:var(--text);font-size:18px;font-weight:600;cursor:pointer;
- transition:.15s ease;
+.home-actions{
+  display:grid;
+  gap:18px;
 }
-.btn:active{transform:scale(.97)}
-.btn:hover{box-shadow:0 15px 40px rgba(0,0,0,.35)}
+
+.btn{
+  width:100%;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  color:var(--text);
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+}
+.btn:hover{transform:translateY(-2px) scale(1.02)}
 
 .back{
- background:linear-gradient(90deg,var(--accent),#22d3ee);
- color:#020617;border:none;padding:10px 18px;border-radius:14px;
- font-weight:700;cursor:pointer;margin-bottom:18px;
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  border:none;
+  padding:10px 18px;
+  border-radius:14px;
+  font-weight:700;
+  margin-bottom:18px;
 }
 
-.home-actions{display:grid;gap:18px;margin-top:20px}
-
-/* Card */
 .card{
- background:var(--card);border:1px solid var(--border);
- border-radius:24px;padding:24px;margin-top:12px;
- box-shadow:0 20px 50px rgba(0,0,0,.35);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:24px;
+  margin-top:12px;
 }
+
 input,select{
- width:100%;padding:15px;margin-top:12px;border-radius:16px;
- border:1px solid var(--border);
- background:rgba(255,255,255,.04);
- color:var(--text);font-size:16px;
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
 }
 
-/* Timer */
-.timer{font-size:64px;text-align:center;margin:30px 0;font-weight:800}
-.timer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.timer{
+  font-size:64px;
+  text-align:center;
+  margin:30px 0;
+  font-weight:800
+}
+.timer-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px
+}
 
-/* Items */
 .item{
- display:flex;align-items:center;gap:12px;padding:14px;
- border-radius:16px;border:1px solid var(--border);
- background:rgba(255,255,255,.04);margin-top:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  margin-top:12px;
 }
 .item.done{opacity:.5;text-decoration:line-through}
 .item button{
- margin-left:auto;background:#ef4444;border:none;color:#fff;
- width:30px;height:30px;border-radius:50%;cursor:pointer
+  margin-left:auto;
+  background:#ef4444;
+  border:none;
+  color:#fff;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  cursor:pointer
 }
 
 /* Drawer */
 .drawer{
- position:fixed;top:0;left:-100%;
- width:min(78%,360px);height:100%;
- background:linear-gradient(180deg,var(--bg2),var(--bg));
- backdrop-filter:blur(18px);
- border-right:1px solid var(--border);
- padding:22px;transition:.35s;z-index:999;
+  position:fixed;
+  top:0;
+  left:-75%;
+  width:75%;
+  height:100%;
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
+  border-right:1px solid var(--border);
+  padding:22px;
+  transition:.35s;
+  z-index:999;
 }
 .drawer.open{left:0}
-.drawer-header{
- display:flex;justify-content:space-between;align-items:center;
- margin-bottom:20px;
-}
-.drawer-close{
- font-size:18px;opacity:.5;cursor:pointer;
-}
-.drawer-close:hover{opacity:.9}
+.drawer h3{margin-bottom:20px}
 .drawer button{
- width:100%;padding:14px;border-radius:14px;border:none;
- background:linear-gradient(90deg,var(--accent),#22d3ee);
- color:#020617;font-weight:700;
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  font-weight:700
 }
 </style>
 </head>
 
 <body>
 
-<!-- Drawer -->
+<!-- DRAWER -->
 <div class="drawer" id="drawer">
- <div class="drawer-header">
   <h3>Configurações</h3>
-  <div class="drawer-close" onclick="closeDrawer()">✕</div>
- </div>
- <button onclick="toggleTheme()">Modo Claro / Escuro</button>
- <p style="margin-top:20px;color:var(--muted)">Deslize ou toque no X para fechar</p>
+  <button onclick="toggleTheme()">Modo Claro / Escuro</button>
+  <p style="margin-top:20px;color:var(--muted)">Arraste ou toque duas vezes para fechar</p>
 </div>
 
 <!-- HOME -->
 <div class="screen active" id="home">
- <div class="top"><div class="menu-btn" onclick="openDrawer()">☰</div></div>
- <div class="logo">APOLLO</div>
- <div class="home-actions">
-  <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
-  <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
-  <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
-  <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
- </div>
+  <div class="top">
+    <div class="menu-btn" onclick="openDrawer()">☰</div>
+  </div>
+  <div class="logo">APOLLO</div>
+  <div class="home-actions">
+    <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
+    <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
+    <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
+    <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
+  </div>
 </div>
 
 <!-- IMC -->
 <div class="screen" id="imc">
- <button class="back" onclick="showScreen('home')">Voltar</button>
- <h2>Calculadora Fitness</h2>
- <div class="card">
-  <input id="peso" type="number" placeholder="Peso (kg)">
-  <input id="altura" type="number" placeholder="Altura (cm)">
-  <button class="btn" onclick="calcIMC()">Calcular</button>
-  <h2 id="imcResult" style="text-align:center;margin-top:16px">0.0</h2>
- </div>
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Calculadora Fitness</h2>
+
+  <div class="card">
+    <select id="sexo">
+      <option value="">Sexo</option>
+      <option value="masculino">Masculino</option>
+      <option value="feminino">Feminino</option>
+    </select>
+
+    <input id="idade" type="number" placeholder="Idade">
+    <input id="peso" type="number" placeholder="Peso (kg)">
+    <input id="altura" type="number" placeholder="Altura (cm)">
+
+    <button class="btn" onclick="calcIMC()">Calcular</button>
+
+    <div style="margin-top:18px;text-align:center">
+      <h2 id="imcResult">0.0</h2>
+      <p id="imcClass" style="margin-top:6px;font-weight:600"></p>
+      <p id="pesoIdeal" style="margin-top:6px;color:var(--muted)"></p>
+    </div>
+  </div>
 </div>
 
 <!-- TIMER -->
 <div class="screen" id="timer">
- <button class="back" onclick="showScreen('home')">Voltar</button>
- <h2>Timer de Treino</h2>
- <div class="card">
-  <div class="timer" id="timerDisplay">00:00</div>
-  <div class="timer-actions">
-   <button class="btn" onclick="startTimer()">Iniciar</button>
-   <button class="btn" onclick="pauseTimer()">Pausar</button>
-   <button class="btn" onclick="resetTimer()">Resetar</button>
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Timer de Treino</h2>
+  <div class="card">
+    <div class="timer" id="timerDisplay">00:00</div>
+    <div class="timer-actions">
+      <button class="btn" onclick="startTimer()">Iniciar</button>
+      <button class="btn" onclick="pauseTimer()">Pausar</button>
+      <button class="btn" onclick="resetTimer()">Resetar</button>
+    </div>
   </div>
- </div>
 </div>
 
 <!-- LISTA -->
 <div class="screen" id="lista">
- <button class="back" onclick="showScreen('home')">Voltar</button>
- <h2>Lista de Compras</h2>
- <div class="card">
-  <input id="itemName" placeholder="Item">
-  <input id="itemQty" placeholder="Quantidade">
-  <button class="btn" onclick="addItem()">Adicionar</button>
-  <div id="itemList"></div>
- </div>
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Lista de Compras</h2>
+  <div class="card">
+    <input id="itemName" placeholder="Item">
+    <input id="itemQty" placeholder="Quantidade">
+    <select id="itemCat">
+      <option>Mercado</option>
+      <option>Higiene</option>
+      <option>Limpeza</option>
+      <option>Proteínas</option>
+    </select>
+    <button class="btn" onclick="addItem()">Adicionar</button>
+    <div id="itemList"></div>
+  </div>
 </div>
 
 <!-- NOTES -->
 <div class="screen" id="notes">
- <button class="back" onclick="showScreen('home')">Voltar</button>
- <h2>Anotações Rápidas</h2>
- <div class="card">
-  <input id="noteInput" placeholder="Digite sua anotação">
-  <button class="btn" onclick="addNote()">Adicionar</button>
-  <div id="noteList"></div>
- </div>
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Anotações</h2>
+  <div class="card">
+    <input id="noteInput" placeholder="Digite algo">
+    <button class="btn" onclick="addNote()">Adicionar</button>
+    <div id="noteList"></div>
+  </div>
 </div>
 
 <script>
 function showScreen(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
 /* Drawer */
-const drawer=document.getElementById('drawer');
-function openDrawer(){drawer.classList.add('open')}
-function closeDrawer(){drawer.classList.remove('open')}
-function toggleTheme(){document.body.classList.toggle('light')}
+const drawer = document.getElementById('drawer');
+function openDrawer(){ drawer.classList.add('open'); }
+let sx = 0;
+drawer.addEventListener('touchstart', e => sx = e.touches[0].clientX);
+drawer.addEventListener('touchmove', e => {
+  if(sx - e.touches[0].clientX > 60) drawer.classList.remove('open');
+});
+let lastTap = 0;
+drawer.addEventListener('touchend', () => {
+  const now = Date.now();
+  if(now - lastTap < 300) drawer.classList.remove('open');
+  lastTap = now;
+});
+
+function toggleTheme(){ document.body.classList.toggle('light'); }
 
 /* IMC */
 function calcIMC(){
- const p=+peso.value,a=+altura.value/100;
- if(!p||!a)return;
- imcResult.innerText=(p/(a*a)).toFixed(1);
+  const peso = parseFloat(pesoInput = peso.value);
+  const altura = parseFloat(alturaInput = altura.value)/100;
+
+  if(!peso || !altura) return alert("Preencha os dados corretamente");
+
+  const imc = peso/(altura*altura);
+  let txt="", cor="";
+
+  if(imc<18.5){txt="Abaixo do peso";cor="#38bdf8";}
+  else if(imc<25){txt="Peso saudável";cor="#22c55e";}
+  else if(imc<30){txt="Sobrepeso";cor="#facc15";}
+  else{txt="Obesidade";cor="#ef4444";}
+
+  imcResult.innerText = imc.toFixed(1);
+  imcClass.innerText = txt;
+  imcClass.style.color = cor;
+
+  pesoIdeal.innerText =
+    `Peso saudável estimado: ${(18.5*altura*altura).toFixed(1)}kg – ${(24.9*altura*altura).toFixed(1)}kg`;
 }
 
 /* Timer */
-let sec=0,intv=null;
+let sec=0,intv;
 function startTimer(){
- if(intv)return;
- intv=setInterval(()=>{
-  sec++;
-  timerDisplay.innerText=
-   String(Math.floor(sec/60)).padStart(2,'0')+':' +
-   String(sec%60).padStart(2,'0');
- },1000);
+  if(!intv){
+    intv=setInterval(()=>{
+      sec++;
+      timerDisplay.innerText =
+        String(Math.floor(sec/60)).padStart(2,'0')+":"+String(sec%60).padStart(2,'0');
+    },1000);
+  }
 }
-function pauseTimer(){clearInterval(intv);intv=null}
-function resetTimer(){pauseTimer();sec=0;timerDisplay.innerText='00:00'}
+function pauseTimer(){clearInterval(intv);intv=null;}
+function resetTimer(){pauseTimer();sec=0;timerDisplay.innerText="00:00";}
 
 /* Lista */
 function addItem(){
- if(!itemName.value)return;
- const d=document.createElement('div');
- d.className='item';
- d.innerHTML=`<strong>${itemName.value}</strong> (${itemQty.value})
- <button onclick="this.parentElement.remove()">×</button>`;
- itemList.appendChild(d);
- itemName.value=itemQty.value='';
+  if(!itemName.value) return;
+  let d=document.createElement('div');
+  d.className='item';
+  d.innerHTML=`<strong>${itemName.value}</strong> (${itemCat.value})
+  <button onclick="this.parentElement.remove()">×</button>`;
+  itemList.appendChild(d);
+  itemName.value=itemQty.value='';
 }
 
 /* Notes */
 function addNote(){
- if(!noteInput.value)return;
- const d=document.createElement('div');
- d.className='item';
- d.innerHTML=`${noteInput.value}
- <button onclick="this.parentElement.remove()">×</button>`;
- noteList.appendChild(d);
- noteInput.value='';
+  if(!noteInput.value) return;
+  let d=document.createElement('div');
+  d.className='item';
+  d.innerHTML=`${noteInput.value}
+  <button onclick="this.parentElement.remove()">×</button>`;
+  noteList.appendChild(d);
+  noteInput.value='';
 }
 </script>
+
 </body>
 </html>
