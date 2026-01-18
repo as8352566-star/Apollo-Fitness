@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drawer Premium</title>
+<title>App – Drawer Configurações</title>
 
 <style>
 :root{
@@ -11,72 +11,75 @@
   --bg2:#020617;
   --border:#1e293b;
   --text:#e5e7eb;
-  --accent:#38bdf8;
+  --muted:#94a3b8;
+  --accent:#22d3ee;
 }
 
-/* ===== RESET ===== */
+/* RESET */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 body{
-  background:var(--bg);
+  background:#0f172a;
   color:var(--text);
   min-height:100vh;
 }
 
-/* ===== BOTÃO MENU ===== */
-.menu-btn{
-  margin:20px;
+/* BOTÃO ABRIR CONFIG */
+.open-btn{
+  margin:30px;
   padding:12px 18px;
-  border-radius:14px;
   border:none;
+  border-radius:14px;
   background:var(--accent);
-  font-weight:700;
+  color:#020617;
+  font-weight:600;
   cursor:pointer;
 }
 
-/* ===== OVERLAY BLUR ===== */
+/* OVERLAY BLUR */
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.35);
-  backdrop-filter:blur(10px);
+  background:rgba(0,0,0,.25);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
   opacity:0;
   pointer-events:none;
-  transition:opacity .35s ease;
+  transition:.25s ease;
   z-index:998;
 }
-.overlay.show{
+
+.overlay.active{
   opacity:1;
   pointer-events:auto;
 }
 
-/* ===== DRAWER ===== */
+/* DRAWER */
 .drawer{
   position:fixed;
   top:0;
   left:0;
   height:100%;
-  width:85%;
+  width:85%;              /* mobile */
   max-width:360px;
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
+  background:var(--bg);
   border-right:1px solid var(--border);
   padding:22px;
-  transform:translateX(-110%);
-  transition:transform .5s cubic-bezier(.22,1,.36,1);
+  transform:translateX(-100%);
+  transition:transform .35s ease;
   z-index:999;
   overflow-y:auto;
 }
 
-/* Desktop */
+/* desktop */
 @media (min-width:768px){
   .drawer{
     width:320px;
-    max-width:none;
   }
 }
 
@@ -84,35 +87,26 @@ body{
   transform:translateX(0);
 }
 
-/* ===== BOTÃO FECHAR ===== */
-.drawer .close-btn{
+/* BOTÃO X */
+.close-drawer{
   position:absolute;
   top:14px;
   right:14px;
-  width:36px;
-  height:36px;
-  border-radius:50%;
+  background:transparent;
   border:none;
-  background:rgba(255,255,255,.08);
-  color:white;
   font-size:20px;
+  color:var(--muted);
   cursor:pointer;
 }
 
-/* ===== CONTEÚDO ===== */
-.drawer h3{
-  margin-top:40px;
-  margin-bottom:14px;
-  font-size:18px;
+.close-drawer:hover{
+  color:var(--text);
 }
 
-.drawer p{
-  font-size:14px;
-  opacity:.85;
-  line-height:1.5;
-  margin-bottom:20px;
-  word-wrap:break-word;
-  overflow-wrap:break-word;
+/* CONTEÚDO */
+.drawer h2{
+  margin-bottom:18px;
+  font-size:18px;
 }
 
 .drawer button.action{
@@ -120,64 +114,58 @@ body{
   padding:14px;
   border-radius:16px;
   border:none;
-  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  background:linear-gradient(90deg,var(--accent),#38bdf8);
+  color:#020617;
   font-weight:700;
-  cursor:pointer;
+  margin-bottom:16px;
+  white-space:normal;
+}
+
+/* GARANTIA DE QUEBRA DE TEXTO */
+.drawer p,
+.drawer h1,
+.drawer h2,
+.drawer h3,
+.drawer span,
+.drawer button{
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  white-space:normal;
 }
 </style>
 </head>
 
 <body>
 
-<button class="menu-btn">⚙️ Configurações</button>
+<button class="open-btn" onclick="openDrawer()">Abrir Configurações</button>
 
-<div class="overlay"></div>
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
+<!-- DRAWER -->
 <div class="drawer" id="drawer">
-  <button class="close-btn">&times;</button>
+  <button class="close-drawer" onclick="closeDrawer()">✕</button>
 
-  <h3>Configurações</h3>
-  <p>Ative ou desative opções do app. Tudo salvo localmente no seu dispositivo.</p>
+  <h2>Configurações</h2>
 
   <button class="action">Modo Claro / Escuro</button>
+
+  <p>
+    Toque duas vezes ou clique fora para fechar.  
+    Este texto agora quebra corretamente e não corta em nenhuma resolução.
+  </p>
 </div>
 
 <script>
-const drawer = document.getElementById('drawer');
-const overlay = document.querySelector('.overlay');
-const menuBtn = document.querySelector('.menu-btn');
-const closeBtn = document.querySelector('.close-btn');
-
-/* ===== ABRIR ===== */
-menuBtn.onclick = () => {
-  drawer.classList.add('open');
-  overlay.classList.add('show');
-};
-
-/* ===== FECHAR ===== */
-function closeDrawer(){
-  drawer.classList.remove('open');
-  overlay.classList.remove('show');
+function openDrawer(){
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("overlay").classList.add("active");
 }
 
-closeBtn.onclick = closeDrawer;
-overlay.onclick = closeDrawer;
-
-/* ===== DUPLO CLIQUE (PC) ===== */
-drawer.addEventListener('dblclick', closeDrawer);
-
-/* ===== ESC (PC) ===== */
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape') closeDrawer();
-});
-
-/* ===== DOUBLE TAP (MOBILE) ===== */
-let lastTap = 0;
-drawer.addEventListener('touchend', ()=>{
-  const now = new Date().getTime();
-  if(now - lastTap < 300) closeDrawer();
-  lastTap = now;
-});
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("overlay").classList.remove("active");
+}
 </script>
 
 </body>
