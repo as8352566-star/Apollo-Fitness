@@ -157,6 +157,23 @@ input,select{
   <button onclick="toggleTheme()">Modo Claro / Escuro</button>
   <p style="margin-top:20px;color:var(--muted)">Arraste para fechar</p>
 </div>
+  <script>
+let lastTap = 0;
+
+drawer.addEventListener('touchend', () => {
+  const now = new Date().getTime();
+  const tapLength = now - lastTap;
+
+  if (tapLength < 300 && tapLength > 0) {
+    // Duplo toque detectado
+    drawer.classList.remove('open');
+  }
+
+  lastTap = now;
+});
+    
+</script>
+
 
 <!-- HOME -->
 <div class="screen active" id="home">
