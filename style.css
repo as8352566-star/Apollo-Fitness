@@ -143,3 +143,21 @@ input,select{
   color:#020617;
   font-weight:700
 }
+/* X discreto para fechar o drawer */
+.close-x{
+  position:absolute;
+  top:14px;
+  left:14px;
+  font-size:18px;
+  font-weight:300;
+  color:var(--muted);
+  cursor:pointer;
+  opacity:.35;
+  user-select:none;
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+.close-x:hover{
+  opacity:.8;
+  transform:scale(1.1);
+}
