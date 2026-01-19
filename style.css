@@ -147,7 +147,7 @@ input,select{
 .close-x{
   position:absolute;
   top:14px;
-  left:14px;
+  right:14px;
   font-size:18px;
   font-weight:300;
   color:var(--muted);
