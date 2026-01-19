@@ -5,67 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apollo Fitness</title>
 
-<style>
-:root{
-  --bg:#0b0f14;
-  --bg2:#0f172a;
-  --card:rgba(255,255,255,0.06);
-  --text:#ffffff;
-  --muted:#9ca3af;
-  --border:rgba(255,255,255,0.12);
-  --accent:#38bdf8;
-}
-body.light{
-  --bg:#eef2f7;
-  --bg2:#dbeafe;
-  --card:#ffffff;
-  --text:#020617;
-  --muted:#475569;
-  --border:#d1d5db;
-  --accent:#2563eb;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
-body{
-  height:100vh;
-  background:linear-gradient(180deg,var(--bg),var(--bg2));
-  color:var(--text);
-  overflow:hidden;
-}
-.screen{position:absolute;inset:0;padding:24px;opacity:0;pointer-events:none}
-.screen.active{opacity:1;pointer-events:auto}
-.logo{text-align:center;font-size:44px;font-weight:900;margin:40px 0}
-.btn{
-  width:100%;padding:20px;border-radius:20px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.06);
-  color:var(--text);font-size:18px;font-weight:600;cursor:pointer
-}
-.back{
-  background:var(--accent);color:#020617;
-  border:none;padding:10px 18px;border-radius:14px;
-  font-weight:700;margin-bottom:18px
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:24px;
-  margin-top:12px
-}
-input,select{
-  width:100%;padding:15px;margin-top:12px;
-  border-radius:16px;border:1px solid var(--border);
-  background:rgba(255,255,255,.04);color:var(--text)
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <h3>Configurações</h3>
+  <button onclick="toggleTheme()">Modo Claro / Escuro</button>
+  <p style="margin-top:20px;color:var(--muted)">Arraste ou toque duas vezes para fechar</p>
+</div>
+
 <!-- HOME -->
 <div class="screen active" id="home">
+  <div class="top">
+    <div class="menu-btn" onclick="openDrawer()">☰</div>
+  </div>
   <div class="logo">APOLLO</div>
-  <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
+  <div class="home-actions">
+    <button class="btn" onclick="showScreen('imc')">Calculadora Fitness</button>
+    <button class="btn" onclick="showScreen('timer')">Timer de Treino</button>
+    <button class="btn" onclick="showScreen('lista')">Lista de Compras</button>
+    <button class="btn" onclick="showScreen('notes')">Anotações Rápidas</button>
+  </div>
 </div>
 
 <!-- IMC -->
@@ -88,57 +51,55 @@ input,select{
 
     <div style="margin-top:18px;text-align:center">
       <h2 id="imcResult">0.0</h2>
-      <p id="imcClass"></p>
-      <p id="pesoIdeal"></p>
-      <p id="calorias"></p>
+      <p id="imcClass" style="margin-top:6px;font-weight:600"></p>
+      <p id="pesoIdeal" style="margin-top:6px;color:var(--muted)"></p>
     </div>
   </div>
 </div>
 
-<script>
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+<!-- TIMER -->
+<div class="screen" id="timer">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Timer de Treino</h2>
+  <div class="card">
+    <div class="timer" id="timerDisplay">00:00</div>
+    <div class="timer-actions">
+      <button class="btn" onclick="startTimer()">Iniciar</button>
+      <button class="btn" onclick="pauseTimer()">Pausar</button>
+      <button class="btn" onclick="resetTimer()">Resetar</button>
+    </div>
+  </div>
+</div>
 
-function calcIMC(){
-  const peso = parseFloat(document.getElementById('peso').value);
-  const alturaCm = parseFloat(document.getElementById('altura').value);
-  const idade = parseInt(document.getElementById('idade').value);
-  const sexo = document.getElementById('sexo').value;
+<!-- LISTA -->
+<div class="screen" id="lista">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Lista de Compras</h2>
+  <div class="card">
+    <input id="itemName" placeholder="Item">
+    <input id="itemQty" placeholder="Quantidade">
+    <select id="itemCat">
+      <option>Mercado</option>
+      <option>Higiene</option>
+      <option>Limpeza</option>
+      <option>Proteínas</option>
+    </select>
+    <button class="btn" onclick="addItem()">Adicionar</button>
+    <div id="itemList"></div>
+  </div>
+</div>
 
-  if(!peso || !alturaCm || !idade || !sexo){
-    alert("Preencha todos os campos");
-    return;
-  }
+<!-- NOTES -->
+<div class="screen" id="notes">
+  <button class="back" onclick="showScreen('home')">Voltar</button>
+  <h2>Anotações</h2>
+  <div class="card">
+    <input id="noteInput" placeholder="Digite algo">
+    <button class="btn" onclick="addNote()">Adicionar</button>
+    <div id="noteList"></div>
+  </div>
+</div>
 
-  const altura = alturaCm / 100;
-  const imc = peso / (altura * altura);
-
-  let categoria = "";
-  if(imc < 18.5) categoria = "Abaixo do peso";
-  else if(imc < 25) categoria = "Peso saudável";
-  else if(imc < 30) categoria = "Sobrepeso";
-  else categoria = "Obesidade";
-
-  const pesoMin = (18.5 * altura * altura).toFixed(1);
-  const pesoMax = (24.9 * altura * altura).toFixed(1);
-
-  let tmb;
-  if(sexo === "masculino"){
-    tmb = 88.36 + (13.4 * peso) + (4.8 * alturaCm) - (5.7 * idade);
-  } else {
-    tmb = 447.6 + (9.2 * peso) + (3.1 * alturaCm) - (4.3 * idade);
-  }
-
-  document.getElementById('imcResult').innerText = imc.toFixed(1);
-  document.getElementById('imcClass').innerText = `Categoria: ${categoria}`;
-  document.getElementById('pesoIdeal').innerText =
-    `Peso saudável: ${pesoMin}kg – ${pesoMax}kg`;
-  document.getElementById('calorias').innerText =
-    `Calorias diárias estimadas: ${Math.round(tmb)} kcal`;
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
