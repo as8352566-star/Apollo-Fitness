@@ -1,72 +1,141 @@
+/* ========= NAVEGAÇÃO ========= */
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+  });
   document.getElementById(id).classList.add('active');
 }
 
-/* Drawer */
+/* ========= DRAWER ========= */
 const drawer = document.getElementById('drawer');
-function openDrawer(){ drawer.classList.add('open'); }
-let sx = 0;
-drawer.addEventListener('touchstart', e => sx = e.touches[0].clientX);
-drawer.addEventListener('touchmove', e => {
-  if(sx - e.touches[0].clientX > 60) drawer.classList.remove('open');
+
+function openDrawer(){
+  drawer.classList.add('open');
+}
+
+let startX = 0;
+drawer.addEventListener('touchstart', e=>{
+  startX = e.touches[0].clientX;
 });
+
+drawer.addEventListener('touchmove', e=>{
+  if(startX - e.touches[0].clientX > 70){
+    drawer.classList.remove('open');
+  }
+});
+
 let lastTap = 0;
-drawer.addEventListener('touchend', () => {
+drawer.addEventListener('touchend', ()=>{
   const now = Date.now();
-  if(now - lastTap < 300) drawer.classList.remove('open');
+  if(now - lastTap < 300){
+    drawer.classList.remove('open');
+  }
   lastTap = now;
 });
-function toggleTheme(){ document.body.classList.toggle('light'); }
 
-/* IMC */
+function toggleTheme(){
+  document.body.classList.toggle('light');
+}
+
+/* ========= CALCULADORA FITNESS ========= */
 function calcIMC(){
-  const peso = parseFloat(pesoInput.value);
-  const altura = parseFloat(alturaInput.value) / 100;
-  if(!peso || !altura) return;
+  const sexo = document.getElementById('sexo').value;
+  const idade = parseInt(document.getElementById('idade').value);
+  const peso = parseFloat(document.getElementById('peso').value);
+  const alturaCm = parseFloat(document.getElementById('altura').value);
 
-  const imc = peso / (altura * altura);
-  let cls = imc < 18.5 ? "Abaixo do peso" :
-            imc < 25 ? "Peso saudável" :
-            imc < 30 ? "Sobrepeso" : "Obesidade";
-
-  imcResult.innerText = imc.toFixed(1);
-  imcClass.innerText = cls;
-  pesoIdeal.innerText = `Peso saudável: ${(18.5*altura*altura).toFixed(1)}kg – ${(24.9*altura*altura).toFixed(1)}kg`;
-}
-
-/* Timer */
-let sec=0,intv;
-function startTimer(){
-  if(!intv){
-    intv=setInterval(()=>{
-      sec++;
-      timerDisplay.innerText =
-        String(Math.floor(sec/60)).padStart(2,'0')+":"+String(sec%60).padStart(2,'0');
-    },1000);
+  if(!sexo || !idade || !peso || !alturaCm){
+    alert("Preencha todos os campos");
+    return;
   }
-}
-function pauseTimer(){clearInterval(intv);intv=null;}
-function resetTimer(){pauseTimer();sec=0;timerDisplay.innerText="00:00";}
 
-/* Lista */
+  const altura = alturaCm / 100;
+  const imc = peso / (altura * altura);
+
+  let categoria = "";
+  if(imc < 18.5){
+    categoria = "Abaixo do peso";
+  } else if(imc < 25){
+    categoria = "Peso saudável";
+  } else if(imc < 30){
+    categoria = "Sobrepeso";
+  } else {
+    categoria = "Obesidade";
+  }
+
+  const pesoMin = (18.5 * altura * altura).toFixed(1);
+  const pesoMax = (24.9 * altura * altura).toFixed(1);
+
+  // TMB (Harris-Benedict)
+  let tmb = 0;
+  if(sexo === "masculino"){
+    tmb = 88.36 + (13.4 * peso) + (4.8 * alturaCm) - (5.7 * idade);
+  } else {
+    tmb = 447.6 + (9.2 * peso) + (3.1 * alturaCm) - (4.3 * idade);
+  }
+
+  document.getElementById('imcResult').innerText = imc.toFixed(1);
+  document.getElementById('imcClass').innerText = `Categoria: ${categoria}`;
+  document.getElementById('pesoIdeal').innerText =
+    `Peso saudável estimado: ${pesoMin}kg – ${pesoMax}kg | Calorias/dia: ${Math.round(tmb)} kcal`;
+}
+
+/* ========= TIMER ========= */
+let seconds = 0;
+let interval = null;
+
+function startTimer(){
+  if(interval) return;
+  interval = setInterval(()=>{
+    seconds++;
+    const min = String(Math.floor(seconds / 60)).padStart(2,'0');
+    const sec = String(seconds % 60).padStart(2,'0');
+    document.getElementById('timerDisplay').innerText = `${min}:${sec}`;
+  },1000);
+}
+
+function pauseTimer(){
+  clearInterval(interval);
+  interval = null;
+}
+
+function resetTimer(){
+  pauseTimer();
+  seconds = 0;
+  document.getElementById('timerDisplay').innerText = "00:00";
+}
+
+/* ========= LISTA DE COMPRAS ========= */
 function addItem(){
-  if(!itemName.value) return;
-  let d=document.createElement('div');
-  d.className='item';
-  d.innerHTML=`<strong>${itemName.value}</strong> (${itemCat.value})
-  <button onclick="this.parentElement.remove()">×</button>`;
-  itemList.appendChild(d);
-  itemName.value=itemQty.value='';
+  const name = document.getElementById('itemName').value;
+  const cat = document.getElementById('itemCat').value;
+
+  if(!name) return;
+
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <strong>${name}</strong> (${cat})
+    <button onclick="this.parentElement.remove()">×</button>
+  `;
+
+  document.getElementById('itemList').appendChild(div);
+  document.getElementById('itemName').value = "";
+  document.getElementById('itemQty').value = "";
 }
 
-/* Notes */
+/* ========= NOTAS ========= */
 function addNote(){
-  if(!noteInput.value) return;
-  let d=document.createElement('div');
-  d.className='item';
-  d.innerHTML=`${noteInput.value}
-  <button onclick="this.parentElement.remove()">×</button>`;
-  noteList.appendChild(d);
-  noteInput.value='';
+  const text = document.getElementById('noteInput').value;
+  if(!text) return;
+
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    ${text}
+    <button onclick="this.parentElement.remove()">×</button>
+  `;
+
+  document.getElementById('noteList').appendChild(div);
+  document.getElementById('noteInput').value = "";
 }
