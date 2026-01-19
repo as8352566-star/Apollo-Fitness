@@ -33,29 +33,122 @@ body{
     linear-gradient(180deg,var(--bg),var(--bg2));
   color:var(--text);
   overflow:hidden;
+  transition:.35s;
 }
-.screen{position:absolute;inset:0;padding:24px;opacity:0;pointer-events:none;transition:.3s}
+.screen{
+  position:absolute;
+  inset:0;
+  padding:24px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
 .screen.active{opacity:1;pointer-events:auto}
-.top{display:flex;justify-content:space-between;align-items:center;font-size:26px}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:26px;margin-bottom:10px}
 .menu-btn{cursor:pointer}
-.logo{text-align:center;font-size:44px;font-weight:900;letter-spacing:4px;margin:40px 0 30px;background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo{
+  text-align:center;
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin:40px 0 30px;
+  background:linear-gradient(90deg,#38bdf8,#818cf8,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 .home-actions{display:grid;gap:18px}
-.btn{width:100%;padding:20px;border-radius:20px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);font-size:18px;font-weight:600;cursor:pointer}
-.back{background:linear-gradient(90deg,var(--accent),#22d3ee);color:#020617;border:none;padding:10px 18px;border-radius:14px;font-weight:700;margin-bottom:18px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:24px;margin-top:12px}
-input,select{width:100%;padding:15px;margin-top:12px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text)}
-.drawer{position:fixed;top:0;left:-75%;width:75%;height:100%;background:linear-gradient(180deg,var(--bg2),var(--bg));border-right:1px solid var(--border);padding:22px;transition:.35s;z-index:999}
+.btn{
+  width:100%;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  color:var(--text);
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+}
+.back{
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  border:none;
+  padding:10px 18px;
+  border-radius:14px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:24px;
+  margin-top:12px;
+}
+input,select{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+}
+.timer{font-size:64px;text-align:center;margin:30px 0;font-weight:800}
+.timer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  margin-top:12px;
+}
+.item button{
+  margin-left:auto;
+  background:#ef4444;
+  border:none;
+  color:#fff;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  cursor:pointer
+}
+.drawer{
+  position:fixed;
+  top:0;
+  left:-75%;
+  width:75%;
+  height:100%;
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
+  border-right:1px solid var(--border);
+  padding:22px;
+  transition:.35s;
+  z-index:999;
+}
 .drawer.open{left:0}
+.drawer button{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent),#22d3ee);
+  color:#020617;
+  font-weight:700
+}
 </style>
 </head>
 
 <body>
 
+<!-- DRAWER -->
 <div class="drawer" id="drawer">
   <h3>Configurações</h3>
   <button onclick="toggleTheme()">Modo Claro / Escuro</button>
 </div>
 
+<!-- HOME -->
 <div class="screen active" id="home">
   <div class="top">
     <div class="menu-btn" onclick="openDrawer()">☰</div>
@@ -89,10 +182,9 @@ input,select{width:100%;padding:15px;margin-top:12px;border-radius:16px;border:1
 
     <div style="margin-top:18px;text-align:center">
       <h2 id="imcResult">0.0</h2>
-      <p id="imcClass"></p>
-      <p id="obesidadeStage" style="margin-top:6px"></p>
-      <p id="pesoIdeal" style="margin-top:6px;color:var(--muted)"></p>
-      <p id="calorias" style="margin-top:10px;font-weight:600"></p>
+      <p id="imcClass" style="font-weight:600"></p>
+      <p id="pesoIdeal" style="color:var(--muted)"></p>
+      <p id="calorias" style="margin-top:6px;font-weight:600"></p>
     </div>
   </div>
 </div>
@@ -102,45 +194,47 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function openDrawer(){drawer.classList.add('open')}
-function toggleTheme(){document.body.classList.toggle('light')}
+function toggleTheme(){ document.body.classList.toggle('light'); }
+function openDrawer(){ drawer.classList.add('open'); }
 
+/* IMC + Estágios + Calorias */
 function calcIMC(){
-  const peso = +pesoInput.value;
+  const peso = +peso.value;
   const alturaCm = +altura.value;
-  const idade = +idadeInput.value;
-  const sexo = sexoSelect.value;
+  const idade = +idade.value;
+  const sexo = document.getElementById('sexo').value;
 
   if(!peso || !alturaCm || !idade || !sexo){
     alert("Preencha todos os campos");
     return;
   }
 
-  const alturaM = alturaCm / 100;
-  const imc = peso / (alturaM * alturaM);
+  const alturaM = alturaCm/100;
+  const imc = peso/(alturaM*alturaM);
 
-  let classif="", cor="", obesidade="";
-  if(imc < 18.5){classif="Abaixo do peso";cor="#38bdf8"}
-  else if(imc < 25){classif="Peso saudável";cor="#22c55e"}
-  else if(imc < 30){classif="Sobrepeso";cor="#facc15"}
-  else if(imc < 35){classif="Obesidade";obesidade="Grau I";cor="#fb923c"}
-  else if(imc < 40){classif="Obesidade";obesidade="Grau II";cor="#f97316"}
-  else{classif="Obesidade";obesidade="Grau III";cor="#ef4444"}
+  let txt="", cor="";
+  if(imc < 18.5){txt="Abaixo do peso"; cor="#38bdf8";}
+  else if(imc < 25){txt="Peso saudável"; cor="#22c55e";}
+  else if(imc < 30){txt="Sobrepeso"; cor="#facc15";}
+  else if(imc < 35){txt="Obesidade Grau I"; cor="#fb923c";}
+  else if(imc < 40){txt="Obesidade Grau II"; cor="#f87171";}
+  else{txt="Obesidade Grau III"; cor="#ef4444";}
 
-  const pesoMin = (18.5 * alturaM * alturaM).toFixed(1);
-  const pesoMax = (24.9 * alturaM * alturaM).toFixed(1);
+  const pesoMin=(18.5*alturaM*alturaM).toFixed(1);
+  const pesoMax=(24.9*alturaM*alturaM).toFixed(1);
 
-  const calorias = sexo === "masculino"
-    ? (10*peso + 6.25*alturaCm - 5*idade + 5)
-    : (10*peso + 6.25*alturaCm - 5*idade - 161);
+  let tmb = sexo==="masculino"
+    ? 10*peso+6.25*alturaCm-5*idade+5
+    : 10*peso+6.25*alturaCm-5*idade-161;
 
-  imcResult.innerText = imc.toFixed(1);
-  imcResult.style.color = cor;
-  imcClass.innerText = classif;
-  imcClass.style.color = cor;
-  obesidadeStage.innerText = obesidade ? `Estágio: ${obesidade}` : "";
-  pesoIdeal.innerText = `Peso saudável: ${pesoMin}kg – ${pesoMax}kg`;
-  calorias.innerText = `Calorias diárias estimadas: ${Math.round(calorias)} kcal`;
+  const caloriasDia = Math.round(tmb*1.55);
+
+  imcResult.innerText=imc.toFixed(1);
+  imcResult.style.color=cor;
+  imcClass.innerText=txt;
+  imcClass.style.color=cor;
+  pesoIdeal.innerText=`Peso saudável estimado: ${pesoMin}kg – ${pesoMax}kg`;
+  calorias.innerText=`Calorias diárias estimadas: ${caloriasDia} kcal`;
 }
 </script>
 
