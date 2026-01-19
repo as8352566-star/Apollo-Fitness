@@ -13,6 +13,11 @@ function openDrawer(){
   drawer.classList.add('open');
 }
 
+function closeDrawer(){  // FUNÇÃO PARA O X
+  drawer.classList.remove('open');
+}
+
+// Swipe para fechar
 let startX = 0;
 drawer.addEventListener('touchstart', e=>{
   startX = e.touches[0].clientX;
@@ -24,6 +29,7 @@ drawer.addEventListener('touchmove', e=>{
   }
 });
 
+// Double tap para fechar
 let lastTap = 0;
 drawer.addEventListener('touchend', ()=>{
   const now = Date.now();
