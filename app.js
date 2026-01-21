@@ -166,28 +166,56 @@ loadNotes();
 
 /* ========= PLANNER DE TREINO ========= */
 function generateWorkout(){
-  const goal = goalSelect.value;
-  const days = Number(daysSelect.value);
-  const time = Number(timeSelect.value);
+  const goal = document.getElementById("goal").value;
+  const days = parseInt(document.getElementById("days").value);
+  const time = parseInt(document.getElementById("time").value);
 
-  let treino = [];
+  if(!goal || !days || !time){
+    alert("Selecione objetivo, dias e tempo do treino");
+    return;
+  }
+
+  let treinos = [];
 
   if(goal === "massa"){
-    treino = ["Peito + Tríceps", "Costas + Bíceps", "Pernas + Ombros"];
+    treinos = [
+      "Peito + Tríceps",
+      "Costas + Bíceps",
+      "Pernas",
+      "Ombros + Abdômen",
+      "Full Body"
+    ];
   }
 
   if(goal === "emagrecer"){
-    treino = ["Full Body + Cardio", "Pernas + HIIT", "Superiores + Cardio"];
+    treinos = [
+      "Full Body + Cardio",
+      "Pernas + HIIT",
+      "Superiores + Cardio",
+      "Core + Cardio",
+      "HIIT Total"
+    ];
   }
 
   if(goal === "manter"){
-    treino = ["Superiores", "Inferiores", "Core + Cardio"];
+    treinos = [
+      "Superiores",
+      "Inferiores",
+      "Cardio + Core",
+      "Full Body",
+      "Mobilidade"
+    ];
   }
 
-  let result = `<strong>${days}x por semana • ${time} min</strong><br><br>`;
-  for(let i=0;i<days;i++){
-    result += `Dia ${i+1}: ${treino[i % treino.length]}<br>`;
+  let html = `<strong>${days}x por semana • ${time} min</strong><br><br>`;
+
+  for(let i = 0; i < days; i++){
+    html += `Dia ${i + 1}: ${treinos[i]}<br>`;
   }
 
-  plannerResult.innerHTML = result;
+  document.getElementById("plannerResult").innerHTML = html;
+
+  // 🔥 MOSTRA O CARD (isso estava faltando)
+  document.getElementById("plannerResultCard")
+    .classList.remove("hidden");
 }
