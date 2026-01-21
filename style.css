@@ -7,6 +7,7 @@
   --border:rgba(255,255,255,0.12);
   --accent:#38bdf8;
 }
+
 body.light{
   --bg:#eef2f7;
   --bg2:#dbeafe;
@@ -16,7 +17,14 @@ body.light{
   --border:#d1d5db;
   --accent:#2563eb;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+}
+
 body{
   height:100vh;
   background:
@@ -27,6 +35,8 @@ body{
   overflow:hidden;
   transition:.35s;
 }
+
+/* ===== TELAS ===== */
 .screen{
   position:absolute;
   inset:0;
@@ -35,15 +45,21 @@ body{
   pointer-events:none;
   transition:.3s;
 }
-.screen.active{opacity:1;pointer-events:auto}
+.screen.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* ===== HOME ===== */
 .top{
   display:flex;
   justify-content:space-between;
   align-items:center;
   font-size:26px;
-  margin-bottom:10px
+  margin-bottom:10px;
 }
 .menu-btn{cursor:pointer}
+
 .logo{
   text-align:center;
   font-size:44px;
@@ -54,7 +70,13 @@ body{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.home-actions{display:grid;gap:18px}
+
+.home-actions{
+  display:grid;
+  gap:18px;
+}
+
+/* ===== BOTÕES ===== */
 .btn{
   width:100%;
   padding:20px;
@@ -67,7 +89,10 @@ body{
   cursor:pointer;
   transition:.25s;
 }
-.btn:hover{transform:translateY(-2px) scale(1.02)}
+.btn:hover{
+  transform:translateY(-2px) scale(1.02);
+}
+
 .back{
   background:linear-gradient(90deg,var(--accent),#22d3ee);
   color:#020617;
@@ -77,6 +102,8 @@ body{
   font-weight:700;
   margin-bottom:18px;
 }
+
+/* ===== CARDS ===== */
 .card{
   background:var(--card);
   border:1px solid var(--border);
@@ -84,6 +111,8 @@ body{
   padding:24px;
   margin-top:12px;
 }
+
+/* ===== INPUTS ===== */
 input,select{
   width:100%;
   padding:15px;
@@ -93,13 +122,21 @@ input,select{
   background:rgba(255,255,255,.04);
   color:var(--text);
 }
+
+/* ===== TIMER ===== */
 .timer{
   font-size:64px;
   text-align:center;
   margin:30px 0;
-  font-weight:800
+  font-weight:800;
 }
-.timer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.timer-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+/* ===== LISTA / NOTAS ===== */
 .item{
   display:flex;
   align-items:center;
@@ -118,8 +155,10 @@ input,select{
   width:30px;
   height:30px;
   border-radius:50%;
-  cursor:pointer
+  cursor:pointer;
 }
+
+/* ===== DRAWER ===== */
 .drawer{
   position:fixed;
   top:0;
@@ -141,9 +180,10 @@ input,select{
   border:none;
   background:linear-gradient(90deg,var(--accent),#22d3ee);
   color:#020617;
-  font-weight:700
+  font-weight:700;
 }
-/* X discreto para fechar o drawer */
+
+/* X discreto */
 .close-x{
   position:absolute;
   top:14px;
@@ -156,27 +196,28 @@ input,select{
   user-select:none;
   transition:opacity .2s ease, transform .2s ease;
 }
-
-#planner label {
-  display: block;
-  margin-top: 12px;
-  font-weight: 600;
-}
-
-#planner select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  margin-top: 6px;
-}
-
-#plannerResult {
-  margin-top: 20px;
-  line-height: 1.6;
-}
-
 .close-x:hover{
   opacity:.8;
   transform:scale(1.1);
+}
+
+/* ===== PLANEJADOR DE TREINO ===== */
+#planner label{
+  display:block;
+  margin-top:12px;
+  font-weight:600;
+}
+
+#plannerResult{
+  margin-top:14px;
+  line-height:1.7;
+}
+
+#plannerResultCard h3{
+  margin-bottom:10px;
+}
+
+/* ===== UTIL ===== */
+.hidden{
+  display:none;
 }
