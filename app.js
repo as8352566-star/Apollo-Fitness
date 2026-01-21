@@ -13,11 +13,18 @@ function openDrawer(){
   drawer.classList.add('open');
 }
 
-function closeDrawer(){  // FUNÇÃO PARA O X
+function closeDrawer(){
   drawer.classList.remove('open');
 }
 
-// Swipe para fechar
+/* Fecha ao clicar fora */
+document.addEventListener('click', e=>{
+  if(drawer.classList.contains('open') && !drawer.contains(e.target) && !e.target.closest('.menu-btn')){
+    closeDrawer();
+  }
+});
+
+/* Swipe para fechar */
 let startX = 0;
 drawer.addEventListener('touchstart', e=>{
   startX = e.touches[0].clientX;
@@ -25,20 +32,21 @@ drawer.addEventListener('touchstart', e=>{
 
 drawer.addEventListener('touchmove', e=>{
   if(startX - e.touches[0].clientX > 70){
-    drawer.classList.remove('open');
+    closeDrawer();
   }
 });
 
-// Double tap para fechar
+/* Double tap para fechar */
 let lastTap = 0;
 drawer.addEventListener('touchend', ()=>{
   const now = Date.now();
   if(now - lastTap < 300){
-    drawer.classList.remove('open');
+    closeDrawer();
   }
   lastTap = now;
 });
 
+/* ========= TEMA ========= */
 function toggleTheme(){
   document.body.classList.toggle('light');
 }
@@ -58,32 +66,22 @@ function calcIMC(){
   const altura = alturaCm / 100;
   const imc = peso / (altura * altura);
 
-  let categoria = "";
-  if(imc < 18.5){
-    categoria = "Abaixo do peso";
-  } else if(imc < 25){
-    categoria = "Peso saudável";
-  } else if(imc < 30){
-    categoria = "Sobrepeso";
-  } else {
-    categoria = "Obesidade";
-  }
+  let categoria =
+    imc < 18.5 ? "Abaixo do peso" :
+    imc < 25 ? "Peso saudável" :
+    imc < 30 ? "Sobrepeso" : "Obesidade";
 
   const pesoMin = (18.5 * altura * altura).toFixed(1);
   const pesoMax = (24.9 * altura * altura).toFixed(1);
 
-  // TMB (Harris-Benedict)
-  let tmb = 0;
-  if(sexo === "masculino"){
-    tmb = 88.36 + (13.4 * peso) + (4.8 * alturaCm) - (5.7 * idade);
-  } else {
-    tmb = 447.6 + (9.2 * peso) + (3.1 * alturaCm) - (4.3 * idade);
-  }
+  let tmb = sexo === "masculino"
+    ? 88.36 + (13.4 * peso) + (4.8 * alturaCm) - (5.7 * idade)
+    : 447.6 + (9.2 * peso) + (3.1 * alturaCm) - (4.3 * idade);
 
   document.getElementById('imcResult').innerText = imc.toFixed(1);
   document.getElementById('imcClass').innerText = `Categoria: ${categoria}`;
   document.getElementById('pesoIdeal').innerText =
-    `Peso saudável estimado: ${pesoMin}kg – ${pesoMax}kg | Calorias/dia: ${Math.round(tmb)} kcal`;
+    `Peso saudável: ${pesoMin}kg – ${pesoMax}kg • ${Math.round(tmb)} kcal/dia`;
 }
 
 /* ========= TIMER ========= */
@@ -96,7 +94,7 @@ function startTimer(){
     seconds++;
     const min = String(Math.floor(seconds / 60)).padStart(2,'0');
     const sec = String(seconds % 60).padStart(2,'0');
-    document.getElementById('timerDisplay').innerText = `${min}:${sec}`;
+    timerDisplay.innerText = `${min}:${sec}`;
   },1000);
 }
 
@@ -108,80 +106,88 @@ function pauseTimer(){
 function resetTimer(){
   pauseTimer();
   seconds = 0;
-  document.getElementById('timerDisplay').innerText = "00:00";
+  timerDisplay.innerText = "00:00";
 }
 
-/* ========= LISTA DE COMPRAS ========= */
-function addItem(){
-  const name = document.getElementById('itemName').value;
-  const cat = document.getElementById('itemCat').value;
+/* ========= LISTA DE COMPRAS (SALVA) ========= */
+function loadItems(){
+  itemList.innerHTML = localStorage.getItem("items") || "";
+}
 
+function saveItems(){
+  localStorage.setItem("items", itemList.innerHTML);
+}
+
+function addItem(){
+  const name = itemName.value;
+  const cat = itemCat.value;
   if(!name) return;
 
   const div = document.createElement('div');
   div.className = 'item';
   div.innerHTML = `
     <strong>${name}</strong> (${cat})
-    <button onclick="this.parentElement.remove()">×</button>
+    <button onclick="this.parentElement.remove(); saveItems()">×</button>
   `;
 
-  document.getElementById('itemList').appendChild(div);
-  document.getElementById('itemName').value = "";
-  document.getElementById('itemQty').value = "";
+  itemList.appendChild(div);
+  itemName.value = "";
+  saveItems();
 }
 
-/* ========= NOTAS ========= */
+loadItems();
+
+/* ========= NOTAS (SALVA) ========= */
+function loadNotes(){
+  noteList.innerHTML = localStorage.getItem("notes") || "";
+}
+
+function saveNotes(){
+  localStorage.setItem("notes", noteList.innerHTML);
+}
+
 function addNote(){
-  const text = document.getElementById('noteInput').value;
+  const text = noteInput.value;
   if(!text) return;
 
   const div = document.createElement('div');
   div.className = 'item';
   div.innerHTML = `
     ${text}
-    <button onclick="this.parentElement.remove()">×</button>
+    <button onclick="this.parentElement.remove(); saveNotes()">×</button>
   `;
 
-  document.getElementById('noteList').appendChild(div);
-  document.getElementById('noteInput').value = "";
+  noteList.appendChild(div);
+  noteInput.value = "";
+  saveNotes();
 }
 
-function generateWorkout() {
-  const goal = document.getElementById("goal").value;
-  const days = document.getElementById("days").value;
-  const time = document.getElementById("time").value;
+loadNotes();
 
-  let treino = "";
+/* ========= PLANNER DE TREINO ========= */
+function generateWorkout(){
+  const goal = goalSelect.value;
+  const days = Number(daysSelect.value);
+  const time = Number(timeSelect.value);
 
-  if (goal === "massa") {
-    treino = `
-      <strong>Foco: Hipertrofia</strong><br><br>
-      Dia 1: Peito + Tríceps<br>
-      Dia 2: Costas + Bíceps<br>
-      Dia 3: Pernas + Ombros
-    `;
+  let treino = [];
+
+  if(goal === "massa"){
+    treino = ["Peito + Tríceps", "Costas + Bíceps", "Pernas + Ombros"];
   }
 
-  if (goal === "emagrecer") {
-    treino = `
-      <strong>Foco: Queima de Gordura</strong><br><br>
-      Dia 1: Full Body + Cardio<br>
-      Dia 2: Pernas + HIIT<br>
-      Dia 3: Superiores + Cardio
-    `;
+  if(goal === "emagrecer"){
+    treino = ["Full Body + Cardio", "Pernas + HIIT", "Superiores + Cardio"];
   }
 
-  if (goal === "manter") {
-    treino = `
-      <strong>Foco: Manutenção</strong><br><br>
-      Dia 1: Superiores<br>
-      Dia 2: Inferiores<br>
-      Dia 3: Cardio + Core
-    `;
+  if(goal === "manter"){
+    treino = ["Superiores", "Inferiores", "Core + Cardio"];
   }
 
-  document.getElementById("plannerResult").innerHTML = `
-    <strong>${days}x por semana • ${time} min</strong><br><br>
-    ${treino}
-  `;
+  let result = `<strong>${days}x por semana • ${time} min</strong><br><br>`;
+  for(let i=0;i<days;i++){
+    result += `Dia ${i+1}: ${treino[i % treino.length]}<br>`;
+  }
+
+  plannerResult.innerHTML = result;
 }
