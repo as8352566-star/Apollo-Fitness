@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apollo Fitness</title>
-
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -13,7 +12,6 @@
 <!-- DRAWER -->
 <div class="drawer" id="drawer">
   <span class="close-x" onclick="closeDrawer()">×</span>
-
   <h3>Configurações</h3>
   <button onclick="toggleTheme()">Modo Claro / Escuro</button>
   <p style="margin-top:20px;color:var(--muted)">
@@ -40,24 +38,20 @@
 <div class="screen" id="imc">
   <button class="back" onclick="showScreen('home')">Voltar</button>
   <h2>Calculadora Fitness</h2>
-
   <div class="card">
     <select id="sexo">
       <option value="">Sexo</option>
       <option value="masculino">Masculino</option>
       <option value="feminino">Feminino</option>
     </select>
-
     <input id="idade" type="number" placeholder="Idade">
     <input id="peso" type="number" placeholder="Peso (kg)">
     <input id="altura" type="number" placeholder="Altura (cm)">
-
     <button class="btn" onclick="calcIMC()">Calcular</button>
-
     <div style="margin-top:18px;text-align:center">
       <h2 id="imcResult">0.0</h2>
-      <p id="imcClass" style="margin-top:6px;font-weight:600"></p>
-      <p id="pesoIdeal" style="margin-top:6px;color:var(--muted)"></p>
+      <p id="imcClass"></p>
+      <p id="pesoIdeal"></p>
     </div>
   </div>
 </div>
@@ -90,7 +84,7 @@
       <option>Bebidas</option>
       <option>Congelados</option>
       <option>Frutas & Verduras</option>
-     <option>Padaria</option>
+      <option>Padaria</option>
     </select>
     <button class="btn" onclick="addItem()">Adicionar</button>
     <div id="itemList"></div>
@@ -108,7 +102,7 @@
   </div>
 </div>
 
-<!-- PLANEJADOR DE TREINO -->
+<!-- PLANEJADOR -->
 <div class="screen" id="planner">
   <button class="back" onclick="showScreen('home')">Voltar</button>
   <h2>Planejador de Treino</h2>
@@ -135,14 +129,15 @@
       <option value="90">90 minutos</option>
     </select>
 
-    <button class="btn" onclick="generateWorkout()">
-      Gerar Treino
-    </button>
+    <button class="btn" onclick="generateWorkout()">Gerar Treino</button>
   </div>
 
-  <div class="card" id="plannerResult"></div>
+  <div class="card hidden" id="plannerResultCard">
+    <h3>Seu Treino</h3>
+    <div id="plannerResult"></div>
+  </div>
 </div>
-  
+
 <script src="app.js"></script>
 </body>
 </html>
