@@ -175,47 +175,83 @@ function generateWorkout(){
     return;
   }
 
-  let treinos = [];
+  const planos = {
+    massa: [
+      {
+        nome:"Peito + Tríceps",
+        exercicios:[
+          "Supino reto – 4x8–10",
+          "Supino inclinado – 3x10",
+          "Crucifixo – 3x12",
+          "Tríceps pulley – 3x12",
+          "Tríceps testa – 3x10"
+        ]
+      },
+      {
+        nome:"Costas + Bíceps",
+        exercicios:[
+          "Puxada alta – 4x8–10",
+          "Remada curvada – 3x10",
+          "Remada baixa – 3x12",
+          "Rosca direta – 3x10",
+          "Rosca alternada – 3x12"
+        ]
+      },
+      {
+        nome:"Pernas",
+        exercicios:[
+          "Agachamento – 4x8",
+          "Leg press – 3x10",
+          "Cadeira extensora – 3x12",
+          "Mesa flexora – 3x12",
+          "Panturrilha – 4x15"
+        ]
+      },
+      {
+        nome:"Ombros + Abdômen",
+        exercicios:[
+          "Desenvolvimento – 4x10",
+          "Elevação lateral – 3x12",
+          "Elevação frontal – 3x12",
+          "Abdominal infra – 3x15",
+          "Prancha – 3x30s"
+        ]
+      },
+      {
+        nome:"Full Body",
+        exercicios:[
+          "Agachamento – 3x10",
+          "Supino – 3x10",
+          "Remada – 3x10",
+          "Elevação lateral – 3x12",
+          "Abdominal – 3x15"
+        ]
+      }
+    ]
+  };
 
-  if(goal === "massa"){
-    treinos = [
-      "Peito + Tríceps",
-      "Costas + Bíceps",
-      "Pernas",
-      "Ombros + Abdômen",
-      "Full Body"
-    ];
+  let html = `
+    <strong>${days}x por semana • ${time} min</strong>
+    <div class="workout-list">
+  `;
+
+  for(let i=0;i<days;i++){
+    const dia = planos[goal][i];
+    html += `
+      <div class="workout-day">
+        <h4>Dia ${i+1} — ${dia.nome}</h4>
+        <ul>
+          ${dia.exercicios.map(ex=>`<li>${ex}</li>`).join("")}
+        </ul>
+      </div>
+    `;
   }
 
-  if(goal === "emagrecer"){
-    treinos = [
-      "Full Body + Cardio",
-      "Pernas + HIIT",
-      "Superiores + Cardio",
-      "Core + Cardio",
-      "HIIT Total"
-    ];
-  }
-
-  if(goal === "manter"){
-    treinos = [
-      "Superiores",
-      "Inferiores",
-      "Cardio + Core",
-      "Full Body",
-      "Mobilidade"
-    ];
-  }
-
-  let html = `<strong>${days}x por semana • ${time} min</strong><br><br>`;
-
-  for(let i = 0; i < days; i++){
-    html += `Dia ${i + 1}: ${treinos[i]}<br>`;
-  }
+  html += `</div>`;
 
   document.getElementById("plannerResult").innerHTML = html;
+  document.getElementById("plannerResultCard").classList.remove("hidden");
 
-  // 🔥 MOSTRA O CARD (isso estava faltando)
-  document.getElementById("plannerResultCard")
-    .classList.remove("hidden");
+  // 💾 SALVAR TREINO
+  localStorage.setItem("apolloTreino", html);
 }
