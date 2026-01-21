@@ -255,3 +255,11 @@ function generateWorkout(){
   // 💾 SALVAR TREINO
   localStorage.setItem("apolloTreino", html);
 }
+
+window.addEventListener("load", ()=>{
+  const treinoSalvo = localStorage.getItem("apolloTreino");
+  if(treinoSalvo){
+    document.getElementById("plannerResult").innerHTML = treinoSalvo;
+    document.getElementById("plannerResultCard").classList.remove("hidden");
+  }
+});
