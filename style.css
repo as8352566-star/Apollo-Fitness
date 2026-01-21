@@ -221,3 +221,38 @@ input,select{
 .hidden{
   display:none;
 }
+
+/* ===== TREINO PREMIUM ===== */
+.workout-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:16px;
+}
+
+.workout-day{
+  padding:16px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.08),
+    rgba(255,255,255,.02)
+  );
+}
+
+.workout-day h4{
+  margin-bottom:8px;
+  font-size:16px;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.workout-day ul{
+  padding-left:18px;
+}
+
+.workout-day li{
+  margin-bottom:6px;
+  font-size:14px;
+}
