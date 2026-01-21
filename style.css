@@ -157,6 +157,25 @@ input,select{
   transition:opacity .2s ease, transform .2s ease;
 }
 
+#planner label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+#planner select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-top: 6px;
+}
+
+#plannerResult {
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
 .close-x:hover{
   opacity:.8;
   transform:scale(1.1);
