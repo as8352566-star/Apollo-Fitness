@@ -145,3 +145,43 @@ function addNote(){
   document.getElementById('noteList').appendChild(div);
   document.getElementById('noteInput').value = "";
 }
+
+function generateWorkout() {
+  const goal = document.getElementById("goal").value;
+  const days = document.getElementById("days").value;
+  const time = document.getElementById("time").value;
+
+  let treino = "";
+
+  if (goal === "massa") {
+    treino = `
+      <strong>Foco: Hipertrofia</strong><br><br>
+      Dia 1: Peito + Tríceps<br>
+      Dia 2: Costas + Bíceps<br>
+      Dia 3: Pernas + Ombros
+    `;
+  }
+
+  if (goal === "emagrecer") {
+    treino = `
+      <strong>Foco: Queima de Gordura</strong><br><br>
+      Dia 1: Full Body + Cardio<br>
+      Dia 2: Pernas + HIIT<br>
+      Dia 3: Superiores + Cardio
+    `;
+  }
+
+  if (goal === "manter") {
+    treino = `
+      <strong>Foco: Manutenção</strong><br><br>
+      Dia 1: Superiores<br>
+      Dia 2: Inferiores<br>
+      Dia 3: Cardio + Core
+    `;
+  }
+
+  document.getElementById("plannerResult").innerHTML = `
+    <strong>${days}x por semana • ${time} min</strong><br><br>
+    ${treino}
+  `;
+}
